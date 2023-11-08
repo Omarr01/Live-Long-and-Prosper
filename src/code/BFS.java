@@ -1,7 +1,6 @@
 package code;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.Queue;
 
 public class BFS {
@@ -9,7 +8,6 @@ public class BFS {
 		for (Node node : expandedNodes) {
 			nodes.add(node);
 		}
-		
 		return nodes;
 	}
 }

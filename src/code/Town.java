@@ -53,6 +53,20 @@ public class Town {
 		this.prosperityBUILD2 = Integer.parseInt(townParamatersSplitted[22]);
 	}
 
+	public int[] handleDelay(int resourceDelay, int resourceAmount, int resourceType) {
+		int newResourceDelay = 0;
+		int newResourceAmount = 0;
+		int amountRequestResource = resourceType == 1 ? this.amountRequestFood
+				: resourceType == 2 ? this.amountRequestMaterials : this.amountRequestEnergy;
+		if (resourceDelay == 1) {
+			newResourceDelay = 0;
+			newResourceAmount = Math.min(resourceAmount + amountRequestResource, 50);
+		} else if (resourceDelay != 0) {
+			newResourceDelay = resourceDelay - 1;
+		}
+		return new int[] { newResourceAmount, newResourceDelay };
+	}
+
 	public Node build(Node node, int buildNumber) {
 		State nodeState = node.getState();
 
@@ -66,9 +80,18 @@ public class Town {
 						+ this.energyUseBUILD1 * this.unitPriceEnergy + this.getPriceBUILD1())
 				: (this.foodUseBUILD2 * this.unitPriceFood + this.materialsUseBUILD2 * this.unitPriceMaterials
 						+ this.energyUseBUILD2 * this.unitPriceEnergy + this.getPriceBUILD2()));
-		int foodDelay = nodeState.getFoodDelay() == 0 ? 0 : nodeState.getFoodDelay() - 1;
-		int materialsDelay = nodeState.getMaterialsDelay() == 0 ? 0 : nodeState.getMaterialsDelay() - 1;
-		int energyDelay = nodeState.getEnergyDelay() == 0 ? 0 : nodeState.getEnergyDelay() - 1;
+
+		int[] newFoodAmountAndDelay = this.handleDelay(nodeState.getFoodDelay(), food, 1);
+		food = newFoodAmountAndDelay[0];
+		int foodDelay = newFoodAmountAndDelay[1];
+
+		int[] newMaterialsAmountAndDelay = this.handleDelay(nodeState.getMaterialsDelay(), materials, 2);
+		materials = newMaterialsAmountAndDelay[0];
+		int materialsDelay = newMaterialsAmountAndDelay[1];
+
+		int[] newEnergyAmountAndDelay = this.handleDelay(nodeState.getEnergyDelay(), energy, 3);
+		energy = newEnergyAmountAndDelay[0];
+		int energyDelay = newEnergyAmountAndDelay[1];
 
 		State expandedNodeState = new State(prosperity, food, materials, energy, moneySpent, foodDelay, materialsDelay,
 				energyDelay);
@@ -152,201 +175,117 @@ public class Town {
 		int energy = nodeState.getEnergy() - 1;
 		int moneySpent = nodeState.getMoneySpent()
 				+ (this.unitPriceFood + this.unitPriceMaterials + this.unitPriceEnergy);
-		int foodDelay = nodeState.getFoodDelay() == 0 ? 0 : nodeState.getFoodDelay() - 1;
-		int materialsDelay = nodeState.getMaterialsDelay() == 0 ? 0 : nodeState.getMaterialsDelay() - 1;
-		int energyDelay = nodeState.getEnergyDelay() == 0 ? 0 : nodeState.getEnergyDelay() - 1;
-		
+
+		int[] newFoodAmountAndDelay = this.handleDelay(nodeState.getFoodDelay(), food, 1);
+		food = newFoodAmountAndDelay[0];
+		int foodDelay = newFoodAmountAndDelay[1];
+
+		int[] newMaterialsAmountAndDelay = this.handleDelay(nodeState.getMaterialsDelay(), materials, 2);
+		materials = newMaterialsAmountAndDelay[0];
+		int materialsDelay = newMaterialsAmountAndDelay[1];
+
+		int[] newEnergyAmountAndDelay = this.handleDelay(nodeState.getEnergyDelay(), energy, 3);
+		energy = newEnergyAmountAndDelay[0];
+		int energyDelay = newEnergyAmountAndDelay[1];
+
 		State expandedNodeState = new State(prosperity, food, materials, energy, moneySpent, foodDelay, materialsDelay,
 				energyDelay);
-		
-		Node expandedNode = new Node(expandedNodeState, node, Operator.WAIT, node.getDepth() + 1,
-				moneySpent);
-		
+
+		Node expandedNode = new Node(expandedNodeState, node, Operator.WAIT, node.getDepth() + 1, moneySpent);
+
 		return expandedNode;
 	}
 
 	public int getInitialProsperity() {
-		return initialProsperity;
-	}
-
-	public void setInitialProsperity(int initialProsperity) {
-		this.initialProsperity = initialProsperity;
+		return this.initialProsperity;
 	}
 
 	public int getInitialFood() {
-		return initialFood;
-	}
-
-	public void setInitialFood(int initialFood) {
-		this.initialFood = initialFood;
+		return this.initialFood;
 	}
 
 	public int getInitialMaterials() {
-		return initialMaterials;
-	}
-
-	public void setInitialMaterials(int initialMaterials) {
-		this.initialMaterials = initialMaterials;
+		return this.initialMaterials;
 	}
 
 	public int getInitialEnergy() {
-		return initialEnergy;
-	}
-
-	public void setInitialEnergy(int initialEnergy) {
-		this.initialEnergy = initialEnergy;
+		return this.initialEnergy;
 	}
 
 	public int getUnitPriceFood() {
-		return unitPriceFood;
-	}
-
-	public void setUnitPriceFood(int unitPriceFood) {
-		this.unitPriceFood = unitPriceFood;
+		return this.unitPriceFood;
 	}
 
 	public int getUnitPriceMaterials() {
-		return unitPriceMaterials;
-	}
-
-	public void setUnitPriceMaterials(int unitPriceMaterials) {
-		this.unitPriceMaterials = unitPriceMaterials;
+		return this.unitPriceMaterials;
 	}
 
 	public int getUnitPriceEnergy() {
-		return unitPriceEnergy;
-	}
-
-	public void setUnitPriceEnergy(int unitPriceEnergy) {
-		this.unitPriceEnergy = unitPriceEnergy;
+		return this.unitPriceEnergy;
 	}
 
 	public int getAmountRequestFood() {
-		return amountRequestFood;
-	}
-
-	public void setAmountRequestFood(int amountRequestFood) {
-		this.amountRequestFood = amountRequestFood;
+		return this.amountRequestFood;
 	}
 
 	public int getDelayRequestFood() {
-		return delayRequestFood;
-	}
-
-	public void setDelayRequestFood(int delayRequestFood) {
-		this.delayRequestFood = delayRequestFood;
+		return this.delayRequestFood;
 	}
 
 	public int getAmountRequestMaterials() {
-		return amountRequestMaterials;
-	}
-
-	public void setAmountRequestMaterials(int amountRequestMaterials) {
-		this.amountRequestMaterials = amountRequestMaterials;
+		return this.amountRequestMaterials;
 	}
 
 	public int getDelayRequestMaterials() {
-		return delayRequestMaterials;
-	}
-
-	public void setDelayRequestMaterials(int delayRequestMaterials) {
-		this.delayRequestMaterials = delayRequestMaterials;
+		return this.delayRequestMaterials;
 	}
 
 	public int getAmountRequestEnergy() {
-		return amountRequestEnergy;
-	}
-
-	public void setAmountRequestEnergy(int amountRequestEnergy) {
-		this.amountRequestEnergy = amountRequestEnergy;
+		return this.amountRequestEnergy;
 	}
 
 	public int getDelayRequestEnergy() {
-		return delayRequestEnergy;
-	}
-
-	public void setDelayRequestEnergy(int delayRequestEnergy) {
-		this.delayRequestEnergy = delayRequestEnergy;
+		return this.delayRequestEnergy;
 	}
 
 	public int getPriceBUILD1() {
-		return priceBUILD1;
-	}
-
-	public void setPriceBUILD1(int priceBUILD1) {
-		this.priceBUILD1 = priceBUILD1;
+		return this.priceBUILD1;
 	}
 
 	public int getFoodUseBUILD1() {
-		return foodUseBUILD1;
-	}
-
-	public void setFoodUseBUILD1(int foodUseBUILD1) {
-		this.foodUseBUILD1 = foodUseBUILD1;
+		return this.foodUseBUILD1;
 	}
 
 	public int getMaterialsUseBUILD1() {
-		return materialsUseBUILD1;
-	}
-
-	public void setMaterialsUseBUILD1(int materialsUseBUILD1) {
-		this.materialsUseBUILD1 = materialsUseBUILD1;
+		return this.materialsUseBUILD1;
 	}
 
 	public int getEnergyUseBUILD1() {
-		return energyUseBUILD1;
-	}
-
-	public void setEnergyUseBUILD1(int energyUseBUILD1) {
-		this.energyUseBUILD1 = energyUseBUILD1;
+		return this.energyUseBUILD1;
 	}
 
 	public int getProsperityBUILD1() {
-		return prosperityBUILD1;
-	}
-
-	public void setProsperityBUILD1(int prosperityBUILD1) {
-		this.prosperityBUILD1 = prosperityBUILD1;
+		return this.prosperityBUILD1;
 	}
 
 	public int getPriceBUILD2() {
-		return priceBUILD2;
-	}
-
-	public void setPriceBUILD2(int priceBUILD2) {
-		this.priceBUILD2 = priceBUILD2;
+		return this.priceBUILD2;
 	}
 
 	public int getFoodUseBUILD2() {
-		return foodUseBUILD2;
-	}
-
-	public void setFoodUseBUILD2(int foodUseBUILD2) {
-		this.foodUseBUILD2 = foodUseBUILD2;
+		return this.foodUseBUILD2;
 	}
 
 	public int getMaterialsUseBUILD2() {
-		return materialsUseBUILD2;
-	}
-
-	public void setMaterialsUseBUILD2(int materialsUseBUILD2) {
-		this.materialsUseBUILD2 = materialsUseBUILD2;
+		return this.materialsUseBUILD2;
 	}
 
 	public int getEnergyUseBUILD2() {
-		return energyUseBUILD2;
-	}
-
-	public void setEnergyUseBUILD2(int energyUseBUILD2) {
-		this.energyUseBUILD2 = energyUseBUILD2;
+		return this.energyUseBUILD2;
 	}
 
 	public int getProsperityBUILD2() {
-		return prosperityBUILD2;
-	}
-
-	public void setProsperityBUILD2(int prosperityBUILD2) {
-		this.prosperityBUILD2 = prosperityBUILD2;
+		return this.prosperityBUILD2;
 	}
 
 }

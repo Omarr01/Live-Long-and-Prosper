@@ -19,20 +19,21 @@ public class Node {
 
 	public ArrayList<Node> expand(Town town) {
 		ArrayList<Node> expandedNodes = new ArrayList<>();
-		
-		for (Operator operator : Operator.values()) { 
+
+		for (Operator operator : Operator.values()) {
 			Node node = this.isValidOperation(town, operator);
-			
+
 			if (node != null) {
 				expandedNodes.add(node);
 			}
 		}
-		
+
 		return expandedNodes;
 	}
 
 	public Node isValidOperation(Town town, Operator operator) {
 		Node node = null;
+		State currentState = this.getState();
 
 		switch (operator) {
 		case BUILD1:
@@ -44,15 +45,21 @@ public class Node {
 			break;
 
 		case RequestEnergy:
-			node = town.requestEnergy(this);
+			if (currentState.getEnergy() < 50 && currentState.getEnergyDelay() == 0) {
+				node = town.requestEnergy(this);
+			}
 			break;
 
 		case RequestFood:
-			node = town.requestFood(this);
+			if (currentState.getFood() < 50 && currentState.getFoodDelay() == 0) {
+				node = town.requestFood(this);
+			}
 			break;
 
 		case RequestMaterials:
-			node = town.requestMaterials(this);
+			if (currentState.getMaterials() < 50 && currentState.getMaterialsDelay() == 0) {
+				node = town.requestMaterials(this);
+			}
 			break;
 
 		case WAIT:
@@ -69,15 +76,14 @@ public class Node {
 				|| (nodeState.getFoodDelay() != 0 && nodeState.getMaterialsDelay() == 0
 						&& nodeState.getEnergyDelay() != 0)
 				|| (nodeState.getFoodDelay() != 0 && nodeState.getMaterialsDelay() != 0
-						&& nodeState.getEnergyDelay() == 0)) {
+						&& nodeState.getEnergyDelay() == 0))
 			return null;
-		}
 
 		return node;
 	}
 
 	public State getState() {
-		return state;
+		return this.state;
 	}
 
 	public void setState(State state) {
@@ -85,7 +91,7 @@ public class Node {
 	}
 
 	public Node getParent() {
-		return parent;
+		return this.parent;
 	}
 
 	public void setParent(Node parent) {
@@ -93,7 +99,7 @@ public class Node {
 	}
 
 	public Operator getOperator() {
-		return operator;
+		return this.operator;
 	}
 
 	public void setOperator(Operator operator) {
@@ -101,7 +107,7 @@ public class Node {
 	}
 
 	public int getDepth() {
-		return depth;
+		return this.depth;
 	}
 
 	public void setDepth(int depth) {
@@ -109,7 +115,7 @@ public class Node {
 	}
 
 	public double getPathCost() {
-		return pathCost;
+		return this.pathCost;
 	}
 
 	public void setPathCost(double pathCost) {
