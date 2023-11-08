@@ -1,15 +1,18 @@
 package code;
 
-public class LLAPSearch {
+public class LLAPSearch extends GenericSearch {
 
-	public String solve(String townParameters, String strategy, boolean visualize) {
+	public static String solve(String townParameters, String strategy, boolean visualize) {
 		Town town = new Town(townParameters);
 
 		switch (strategy) {
 		case "BF":
+			BFS bfs = new BFS();
+			search(town, bfs);
 			break;
-
 		case "DF":
+			DFS dfs = new DFS();
+			search(town, dfs);
 			break;
 
 		case "ID":
