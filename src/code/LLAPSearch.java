@@ -4,15 +4,17 @@ public class LLAPSearch extends GenericSearch {
 
 	public static String solve(String townParameters, String strategy, boolean visualize) {
 		Town town = new Town(townParameters);
+		String solution = "";
 
 		switch (strategy) {
 		case "BF":
 			BFS bfs = new BFS();
-			search(town, bfs);
+			solution = search(town, bfs);
 			break;
+
 		case "DF":
 			DFS dfs = new DFS();
-			search(town, dfs);
+			solution = search(town, dfs);
 			break;
 
 		case "ID":
@@ -33,7 +35,6 @@ public class LLAPSearch extends GenericSearch {
 		case "AS2":
 			break;
 		}
-
-		return "";
+		return solution;
 	}
 }

@@ -29,33 +29,47 @@ public class Town {
 		String[] townParamatersSplitted = townParameters.split(";");
 
 		this.initialProsperity = Integer.parseInt(townParamatersSplitted[0]);
-		this.initialFood = Integer.parseInt(townParamatersSplitted[1]);
-		this.initialMaterials = Integer.parseInt(townParamatersSplitted[2]);
-		this.initialEnergy = Integer.parseInt(townParamatersSplitted[3]);
-		this.unitPriceFood = Integer.parseInt(townParamatersSplitted[4]);
-		this.unitPriceMaterials = Integer.parseInt(townParamatersSplitted[5]);
-		this.unitPriceEnergy = Integer.parseInt(townParamatersSplitted[6]);
-		this.amountRequestFood = Integer.parseInt(townParamatersSplitted[7]);
-		this.delayRequestFood = Integer.parseInt(townParamatersSplitted[8]);
-		this.amountRequestMaterials = Integer.parseInt(townParamatersSplitted[9]);
-		this.delayRequestMaterials = Integer.parseInt(townParamatersSplitted[10]);
-		this.amountRequestEnergy = Integer.parseInt(townParamatersSplitted[11]);
-		this.delayRequestEnergy = Integer.parseInt(townParamatersSplitted[12]);
-		this.priceBUILD1 = Integer.parseInt(townParamatersSplitted[13]);
-		this.foodUseBUILD1 = Integer.parseInt(townParamatersSplitted[14]);
-		this.materialsUseBUILD1 = Integer.parseInt(townParamatersSplitted[15]);
-		this.energyUseBUILD1 = Integer.parseInt(townParamatersSplitted[16]);
-		this.prosperityBUILD1 = Integer.parseInt(townParamatersSplitted[17]);
-		this.priceBUILD2 = Integer.parseInt(townParamatersSplitted[18]);
-		this.foodUseBUILD2 = Integer.parseInt(townParamatersSplitted[19]);
-		this.materialsUseBUILD2 = Integer.parseInt(townParamatersSplitted[20]);
-		this.energyUseBUILD2 = Integer.parseInt(townParamatersSplitted[21]);
-		this.prosperityBUILD2 = Integer.parseInt(townParamatersSplitted[22]);
+
+		String[] initialResourcesAmounts = townParamatersSplitted[1].split(",");
+		this.initialFood = Integer.parseInt(initialResourcesAmounts[0]);
+		this.initialMaterials = Integer.parseInt(initialResourcesAmounts[1]);
+		this.initialEnergy = Integer.parseInt(initialResourcesAmounts[2]);
+
+		String[] unitResourcePrices = townParamatersSplitted[2].split(",");
+		this.unitPriceFood = Integer.parseInt(unitResourcePrices[0]);
+		this.unitPriceMaterials = Integer.parseInt(unitResourcePrices[1]);
+		this.unitPriceEnergy = Integer.parseInt(unitResourcePrices[2]);
+
+		String[] foodAmountAndDelay = townParamatersSplitted[3].split(",");
+		this.amountRequestFood = Integer.parseInt(foodAmountAndDelay[0]);
+		this.delayRequestFood = Integer.parseInt(foodAmountAndDelay[1]);
+
+		String[] materialsAmountAndDelay = townParamatersSplitted[4].split(",");
+		this.amountRequestMaterials = Integer.parseInt(materialsAmountAndDelay[0]);
+		this.delayRequestMaterials = Integer.parseInt(materialsAmountAndDelay[1]);
+
+		String[] energyAmountAndDelay = townParamatersSplitted[5].split(",");
+		this.amountRequestEnergy = Integer.parseInt(energyAmountAndDelay[0]);
+		this.delayRequestEnergy = Integer.parseInt(energyAmountAndDelay[1]);
+
+		String[] buildOneProperties = townParamatersSplitted[6].split(",");
+		this.priceBUILD1 = Integer.parseInt(buildOneProperties[0]);
+		this.foodUseBUILD1 = Integer.parseInt(buildOneProperties[1]);
+		this.materialsUseBUILD1 = Integer.parseInt(buildOneProperties[2]);
+		this.energyUseBUILD1 = Integer.parseInt(buildOneProperties[3]);
+		this.prosperityBUILD1 = Integer.parseInt(buildOneProperties[4]);
+
+		String[] buildTwoProperties = townParamatersSplitted[7].split(",");
+		this.priceBUILD2 = Integer.parseInt(buildTwoProperties[0]);
+		this.foodUseBUILD2 = Integer.parseInt(buildTwoProperties[1]);
+		this.materialsUseBUILD2 = Integer.parseInt(buildTwoProperties[2]);
+		this.energyUseBUILD2 = Integer.parseInt(buildTwoProperties[3]);
+		this.prosperityBUILD2 = Integer.parseInt(buildTwoProperties[4]);
 	}
 
 	public int[] handleDelay(int resourceDelay, int resourceAmount, int resourceType) {
-		int newResourceDelay = 0;
-		int newResourceAmount = 0;
+		int newResourceDelay = resourceDelay;
+		int newResourceAmount = resourceAmount;
 		int amountRequestResource = resourceType == 1 ? this.amountRequestFood
 				: resourceType == 2 ? this.amountRequestMaterials : this.amountRequestEnergy;
 		if (resourceDelay == 1) {

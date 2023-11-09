@@ -63,9 +63,14 @@ public class Node {
 			break;
 
 		case WAIT:
-			node = town.wait(this);
+			if (currentState.getFoodDelay() + currentState.getMaterialsDelay() + currentState.getEnergyDelay() > 0) {
+				node = town.wait(this);
+			}
 			break;
 		}
+
+		if (node == null)
+			return null;
 
 		State nodeState = node.getState();
 
@@ -78,7 +83,6 @@ public class Node {
 				|| (nodeState.getFoodDelay() != 0 && nodeState.getMaterialsDelay() != 0
 						&& nodeState.getEnergyDelay() == 0))
 			return null;
-
 		return node;
 	}
 
