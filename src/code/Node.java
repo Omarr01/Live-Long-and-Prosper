@@ -9,9 +9,9 @@ public class Node {
 	private Node parent;
 	private Operator operator;
 	private int depth;
-	private double pathCost;
+	private int pathCost;
 
-	public Node(State state, Node parent, Operator operator, int depth, double pathCost) {
+	public Node(State state, Node parent, Operator operator, int depth, int pathCost) {
 		this.state = state;
 		this.parent = parent;
 		this.operator = operator;
@@ -125,7 +125,7 @@ public class Node {
 		return this.pathCost;
 	}
 
-	public void setPathCost(double pathCost) {
+	public void setPathCost(int pathCost) {
 		this.pathCost = pathCost;
 	}
 
@@ -172,10 +172,10 @@ class GRSOneNodeComparator implements Comparator<Node> {
 
 		int n1RemainingProsperity = Math.min(100 - n1State.getProsperity(), 0);
 
-		int n2RemainingProsperity = Math.min(100 - n2State.getProsperity(), 0);
-
 		double n1Heuristic = Math.min((n1RemainingProsperity / Town.getProsperityBUILD1()) * Town.getTotalPriceBUILD1(),
 				(n1RemainingProsperity / Town.getProsperityBUILD2()) * Town.getTotalPriceBUILD2());
+
+		int n2RemainingProsperity = Math.min(100 - n2State.getProsperity(), 0);
 
 		double n2Heuristic = Math.min((n2RemainingProsperity / Town.getProsperityBUILD1()) * Town.getTotalPriceBUILD1(),
 				(n2RemainingProsperity / Town.getProsperityBUILD2()) * Town.getTotalPriceBUILD2());
@@ -192,8 +192,45 @@ class GRSTwoNodeComparator implements Comparator<Node> {
 
 	@Override
 	public int compare(Node n1, Node n2) {
-		// TO BE IMPLEMENTED
-		return 0;
+	    State n1State = n1.getState();
+	    State n2State = n2.getState();
+
+	    int n1RemainingProsperity = Math.min(100 - n1State.getProsperity(), 0);
+	    int n2RemainingProsperity = Math.min(100 - n2State.getProsperity(), 0);
+
+	    double n1RemainingBuild1 = n1RemainingProsperity / Town.getProsperityBUILD1();
+	    double n2RemainingBuild1 = n2RemainingProsperity / Town.getProsperityBUILD1();
+
+	    double n1RemainingBuild2 = n1RemainingProsperity / Town.getProsperityBUILD2();
+	    double n2RemainingBuild2 = n2RemainingProsperity / Town.getProsperityBUILD2();
+
+	    double n1Heuristic = calculateHeuristic(n1RemainingBuild1, n1RemainingBuild2, n1State);
+	    double n2Heuristic = calculateHeuristic(n2RemainingBuild1, n2RemainingBuild2, n2State);
+
+	    if (n1Heuristic < n2Heuristic) {
+	        return -1;
+	    } else if (n1Heuristic > n2Heuristic) {
+	        return 1;
+	    } else {
+	        return 0;
+	    }
+	}
+	
+	public static double calculateHeuristic(double remainingBuild1, double remainingBuild2, State state) {
+	    double build1FoodRequestCost = calculateRequestCost(remainingBuild1, Town.getFoodUseBUILD1(), state.getFood(), Town.getAmountRequestFood(), Town.getUnitPriceFood());
+	    double build1MaterialsRequestCost = calculateRequestCost(remainingBuild1, Town.getMaterialsUseBUILD1(), state.getMaterials(), Town.getAmountRequestMaterials(), Town.getUnitPriceMaterials());
+	    double build1EnergyRequestCost = calculateRequestCost(remainingBuild1, Town.getEnergyUseBUILD1(), state.getEnergy(), Town.getAmountRequestEnergy(), Town.getUnitPriceEnergy());
+
+	    double build2FoodCost = calculateRequestCost(remainingBuild2, Town.getFoodUseBUILD2(), state.getFood(), Town.getAmountRequestFood(), Town.getUnitPriceFood());
+	    double build2MaterialsCost = calculateRequestCost(remainingBuild2, Town.getMaterialsUseBUILD2(), state.getMaterials(), Town.getAmountRequestMaterials(), Town.getUnitPriceMaterials());
+	    double build2EnergyCost = calculateRequestCost(remainingBuild2, Town.getEnergyUseBUILD2(), state.getEnergy(), Town.getAmountRequestEnergy(), Town.getUnitPriceEnergy());
+
+	    return Math.min((remainingBuild1 * Town.getTotalPriceBUILD1()) + build1FoodRequestCost + build1MaterialsRequestCost + build1EnergyRequestCost,
+	            (remainingBuild2 * Town.getTotalPriceBUILD2()) + build2FoodCost + build2MaterialsCost + build2EnergyCost);
+	}
+
+	public static double calculateRequestCost(double remainingBuild, double resourceUse, double currentResource, double amountRequest, double unitPrice) {
+	    return Math.min(0, ((remainingBuild * resourceUse - currentResource) / amountRequest) * unitPrice);
 	}
 }
 
@@ -205,17 +242,17 @@ class ASOneNodeComparator implements Comparator<Node> {
 
 		int n1RemainingProsperity = Math.min(100 - n1State.getProsperity(), 0);
 
-		int n2RemainingProsperity = Math.min(100 - n2State.getProsperity(), 0);
-
 		double n1Heuristic = Math.min((n1RemainingProsperity / Town.getProsperityBUILD1()) * Town.getTotalPriceBUILD1(),
 				(n1RemainingProsperity / Town.getProsperityBUILD2()) * Town.getTotalPriceBUILD2());
+
+		int n2RemainingProsperity = Math.min(100 - n2State.getProsperity(), 0);
 
 		double n2Heuristic = Math.min((n2RemainingProsperity / Town.getProsperityBUILD1()) * Town.getTotalPriceBUILD1(),
 				(n2RemainingProsperity / Town.getProsperityBUILD2()) * Town.getTotalPriceBUILD2());
 
-		if (n1Heuristic + n1State.getMoneySpent() < n2Heuristic + n2State.getMoneySpent())
+		if (n1Heuristic + n1.getPathCost() < n2Heuristic + n2.getPathCost())
 			return -1;
-		if (n1Heuristic + n1State.getMoneySpent() > n2Heuristic + n2State.getMoneySpent())
+		if (n1Heuristic + n1.getPathCost() > n2Heuristic + n2.getPathCost())
 			return 1;
 		return 0;
 	}
@@ -225,7 +262,25 @@ class ASTwoNodeComparator implements Comparator<Node> {
 
 	@Override
 	public int compare(Node n1, Node n2) {
-		// TO BE IMPLEMENTED
+	    State n1State = n1.getState();
+	    State n2State = n2.getState();
+
+	    int n1RemainingProsperity = Math.min(100 - n1State.getProsperity(), 0);
+	    int n2RemainingProsperity = Math.min(100 - n2State.getProsperity(), 0);
+
+	    double n1RemainingBuild1 = n1RemainingProsperity / Town.getProsperityBUILD1();
+	    double n2RemainingBuild1 = n2RemainingProsperity / Town.getProsperityBUILD1();
+
+	    double n1RemainingBuild2 = n1RemainingProsperity / Town.getProsperityBUILD2();
+	    double n2RemainingBuild2 = n2RemainingProsperity / Town.getProsperityBUILD2();
+
+	    double n1Heuristic = GRSTwoNodeComparator.calculateHeuristic(n1RemainingBuild1, n1RemainingBuild2, n1State);
+	    double n2Heuristic = GRSTwoNodeComparator.calculateHeuristic(n2RemainingBuild1, n2RemainingBuild2, n2State);
+
+	    if (n1Heuristic + n1.getPathCost() < n2Heuristic + n2.getPathCost())
+			return -1;
+		if (n1Heuristic + n1.getPathCost() > n2Heuristic + n2.getPathCost())
+			return 1;
 		return 0;
 	}
 }

@@ -33,8 +33,8 @@ public class LLAPSearch extends GenericSearch {
 			break;
 
 		case "GR2":
-//			GRSTwo grsTwo = new GRSTwo();
-//			solution = search(grsTwo, -1);
+			GRSTwo grsTwo = new GRSTwo();
+			solution = search(grsTwo);
 			break;
 
 		case "AS1":
@@ -43,8 +43,8 @@ public class LLAPSearch extends GenericSearch {
 			break;
 
 		case "AS2":
-//			ASTwo asTwo = new ASTwo();
-//			solution = search(asTwo, -1);
+			ASTwo asTwo = new ASTwo();
+			solution = search(asTwo);
 			break;
 		}
 		return solution;
