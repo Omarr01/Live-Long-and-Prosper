@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 public class GenericSearch {
 
-	public static String search(Problem problem, SearchStrategy queueingFunctionObject, int depthLimit) {
+	public static String search(Problem problem, SearchStrategy queueingFunctionObject, boolean visualize, int depthLimit) {
 		SearchQueue nodes = new SearchQueue(queueingFunctionObject);
 		State rootNodeState = new State(Town.getInitialProsperity(), Town.getInitialFood(), Town.getInitialMaterials(),
 				Town.getInitialEnergy(), 0, 0, 0, 0);
@@ -17,7 +17,7 @@ public class GenericSearch {
 			Node currentNode = nodes.poll();
 			State currentNodeState = currentNode.getState();
 			if (problem.goalTest(currentNodeState))
-				return getSequenceOfActions(currentNode) + ";" + currentNodeState.getMoneySpent() + ";"
+				return getSequenceOfActions(currentNode, visualize) + ";" + currentNode.getPathCost() + ";"
 						+ numberOfNodesExpanded;
 			ArrayList<Node> expandedNodes = handleRepeatedStates(currentNode.expand(), oldNodes);
 			nodes = queueingFunctionObject.queueingFunction(nodes, expandedNodes, depthLimit);
@@ -26,27 +26,42 @@ public class GenericSearch {
 		return "NOSOLUTION";
 	}
 
-	public static String search(Problem problem, SearchStrategy queueingFunctionObject) {
-		return search(problem, queueingFunctionObject, -1);
+	public static String search(Problem problem, SearchStrategy queueingFunctionObject, boolean visualize) {
+		return search(problem, queueingFunctionObject, visualize, -1);
 	}
 
-	public static String idSearch(Problem problem, SearchStrategy queueingFunctionObject) {
+	public static String idSearch(Problem problem, SearchStrategy queueingFunctionObject, boolean visualize) {
 		int depthLimit = 0;
 		while (true) {
-			String solution = search(problem, queueingFunctionObject, depthLimit);
+			String solution = search(problem, queueingFunctionObject, visualize, depthLimit);
 			depthLimit++;
 			if (solution != "NOSOLUTION")
 				return solution;
 		}
 	}
 
-	public static String getSequenceOfActions(Node leafNode) {
+	public static String getSequenceOfActions(Node leafNode, boolean visualize) {
 		String sequenceOfActions = "";
 		Node currentNode = leafNode;
+
+		String sequenceOfStates = "";
+		
 		while (currentNode.getParent() != null) {
 			sequenceOfActions = currentNode.getOperator() + (currentNode == leafNode ? "" : ",") + sequenceOfActions;
+			
+			State currentNodeState = currentNode.getState();
+			
+			sequenceOfStates = "----- State " + currentNode.getDepth() + " -----\n" + currentNodeState.toString() + "\n" + sequenceOfStates;
+			
 			currentNode = currentNode.getParent();
 		}
+		
+		State currentNodeState = currentNode.getState();
+		
+		sequenceOfStates = "----- State " + currentNode.getDepth() + " -----\n" + currentNodeState.toString() + "\n" + sequenceOfStates;
+
+		System.out.println(sequenceOfStates + "\n======================================================");
+		
 		return sequenceOfActions;
 	}
 

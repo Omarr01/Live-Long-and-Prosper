@@ -24,6 +24,13 @@ public class State extends GenericState {
 		this.energyDelay = energyDelay;
 	}
 
+	public String toString() {
+		return "Prosperity: " + this.prosperity + "\n" + "Food: " + this.food + "\n" + "Materials: " + this.materials
+				+ "\n" + "Energy: " + this.energy + "\n" + "Money Spent: " + this.moneySpent + "\n" + "Food Delay: "
+				+ this.foodDelay + "\n" + "Materials Delay: " + this.materialsDelay + "\n" + "Energy Delay: "
+				+ this.energyDelay;
+	}
+
 	public int getProsperity() {
 		return this.prosperity;
 	}
