@@ -117,8 +117,8 @@ public class Town {
 		State expandedNodeState = new State(prosperity, food, materials, energy, moneySpent, foodDelay, materialsDelay,
 				energyDelay);
 
-		Node expandedNode = new Node(expandedNodeState, node, buildNumber == 1 ? Operator.BUILD1 : Operator.BUILD2,
-				node.getDepth() + 1, moneySpent);
+		Node expandedNode = new Node(expandedNodeState, node, buildNumber == 1 ? "BUILD1" : "BUILD2",
+				node.getDepth() + 1, LLAPProblem.pathCost(expandedNodeState));
 
 		return expandedNode;
 	}
@@ -139,7 +139,8 @@ public class Town {
 		State expandedNodeState = new State(prosperity, food, materials, energy, moneySpent, foodDelay, materialsDelay,
 				energyDelay);
 
-		Node expandedNode = new Node(expandedNodeState, node, Operator.RequestEnergy, node.getDepth() + 1, moneySpent);
+		Node expandedNode = new Node(expandedNodeState, node, "RequestEnergy", node.getDepth() + 1,
+				LLAPProblem.pathCost(expandedNodeState));
 
 		return expandedNode;
 	}
@@ -160,7 +161,8 @@ public class Town {
 		State expandedNodeState = new State(prosperity, food, materials, energy, moneySpent, foodDelay, materialsDelay,
 				energyDelay);
 
-		Node expandedNode = new Node(expandedNodeState, node, Operator.RequestFood, node.getDepth() + 1, moneySpent);
+		Node expandedNode = new Node(expandedNodeState, node, "RequestFood", node.getDepth() + 1,
+				LLAPProblem.pathCost(expandedNodeState));
 
 		return expandedNode;
 	}
@@ -181,8 +183,8 @@ public class Town {
 		State expandedNodeState = new State(prosperity, food, materials, energy, moneySpent, foodDelay, materialsDelay,
 				energyDelay);
 
-		Node expandedNode = new Node(expandedNodeState, node, Operator.RequestMaterials, node.getDepth() + 1,
-				moneySpent);
+		Node expandedNode = new Node(expandedNodeState, node, "RequestMaterials", node.getDepth() + 1,
+				LLAPProblem.pathCost(expandedNodeState));
 
 		return expandedNode;
 	}
@@ -212,7 +214,8 @@ public class Town {
 		State expandedNodeState = new State(prosperity, food, materials, energy, moneySpent, foodDelay, materialsDelay,
 				energyDelay);
 
-		Node expandedNode = new Node(expandedNodeState, node, Operator.WAIT, node.getDepth() + 1, moneySpent);
+		Node expandedNode = new Node(expandedNodeState, node, "WAIT", node.getDepth() + 1,
+				LLAPProblem.pathCost(expandedNodeState));
 
 		return expandedNode;
 	}

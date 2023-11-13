@@ -2,7 +2,7 @@ package code;
 
 import java.util.Objects;
 
-public class State {
+public class State extends GenericState {
 	private int prosperity;
 	private int food;
 	private int materials;

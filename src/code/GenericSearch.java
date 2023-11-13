@@ -5,7 +5,7 @@ import java.util.HashSet;
 
 public class GenericSearch {
 
-	public static String search(SearchStrategy queueingFunctionObject, int depthLimit) {
+	public static String search(Problem problem, SearchStrategy queueingFunctionObject, int depthLimit) {
 		SearchQueue nodes = new SearchQueue(queueingFunctionObject);
 		State rootNodeState = new State(Town.getInitialProsperity(), Town.getInitialFood(), Town.getInitialMaterials(),
 				Town.getInitialEnergy(), 0, 0, 0, 0);
@@ -16,7 +16,7 @@ public class GenericSearch {
 		while (!nodes.isEmpty()) {
 			Node currentNode = nodes.poll();
 			State currentNodeState = currentNode.getState();
-			if (currentNodeState.getProsperity() >= 100)
+			if (problem.goalTest(currentNodeState))
 				return getSequenceOfActions(currentNode) + ";" + currentNodeState.getMoneySpent() + ";"
 						+ numberOfNodesExpanded;
 			ArrayList<Node> expandedNodes = handleRepeatedStates(currentNode.expand(), oldNodes);
@@ -26,14 +26,14 @@ public class GenericSearch {
 		return "NOSOLUTION";
 	}
 
-	public static String search(SearchStrategy queueingFunctionObject) {
-		return search(queueingFunctionObject, -1);
+	public static String search(Problem problem, SearchStrategy queueingFunctionObject) {
+		return search(problem, queueingFunctionObject, -1);
 	}
 
-	public static String idSearch(SearchStrategy queueingFunctionObject) {
+	public static String idSearch(Problem problem, SearchStrategy queueingFunctionObject) {
 		int depthLimit = 0;
 		while (true) {
-			String solution = search(queueingFunctionObject, depthLimit);
+			String solution = search(problem, queueingFunctionObject, depthLimit);
 			depthLimit++;
 			if (solution != "NOSOLUTION")
 				return solution;
