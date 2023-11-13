@@ -1,5 +1,7 @@
 package code;
 
+import java.util.Objects;
+
 public class State {
 	private int prosperity;
 	private int food;
@@ -86,13 +88,25 @@ public class State {
 		this.energyDelay = energyDelay;
 	}
 
-	public boolean compareTo(State state) {
-		if (this.prosperity == state.prosperity && this.food == state.food && this.materials == state.materials
-				&& this.energy == state.energy && this.moneySpent == state.moneySpent
-				&& this.foodDelay == state.foodDelay && this.materialsDelay == state.materialsDelay
-				&& this.energyDelay == state.energyDelay)
+	@Override
+	public int hashCode() {
+		return Objects.hash(this.energy, this.energyDelay, this.food, this.foodDelay, this.materials,
+				this.materialsDelay, this.moneySpent, this.prosperity);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
 			return true;
-		return false;
+		if (obj == null)
+			return false;
+		if (this.getClass() != obj.getClass())
+			return false;
+		State other = (State) obj;
+		return this.energy == other.energy && this.energyDelay == other.energyDelay && this.food == other.food
+				&& this.foodDelay == other.foodDelay && this.materials == other.materials
+				&& this.materialsDelay == other.materialsDelay && this.moneySpent == other.moneySpent
+				&& this.prosperity == other.prosperity;
 	}
 
 }
