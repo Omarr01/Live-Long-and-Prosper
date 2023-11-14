@@ -20,7 +20,7 @@ public class SearchQueue {
 	}
 
 	public void addFirst(GenericNode node) {
-		if (this.nodes instanceof ArrayDeque<Node>) {
+		if (this.nodes instanceof ArrayDeque) {
 			((ArrayDeque<Node>) this.nodes).addFirst((Node) node);
 		}
 	}
