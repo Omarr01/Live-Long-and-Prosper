@@ -15,17 +15,17 @@ public class SearchQueue {
 		}
 	}
 
-	public void add(Node node) {
-		this.nodes.add(node);
+	public void add(GenericNode node) {
+		this.nodes.add((Node) node);
 	}
 
-	public void addFirst(Node node) {
+	public void addFirst(GenericNode node) {
 		if (this.nodes instanceof ArrayDeque<Node>) {
-			((ArrayDeque<Node>) this.nodes).addFirst(node);
+			((ArrayDeque<Node>) this.nodes).addFirst((Node) node);
 		}
 	}
 
-	public Node poll() {
+	public GenericNode poll() {
 		return this.nodes.poll();
 	}
 

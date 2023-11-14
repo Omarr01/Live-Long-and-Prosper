@@ -9,8 +9,9 @@ public class Node extends GenericNode {
 		super(state, parent, operator, depth, pathCost);
 	}
 
-	public ArrayList<Node> expand() {
-		ArrayList<Node> expandedNodes = new ArrayList<>();
+	@Override
+	public ArrayList<GenericNode> expand() {
+		ArrayList<GenericNode> expandedNodes = new ArrayList<>();
 
 		for (String operator : LLAPProblem.getOperators()) {
 			Node node = this.isValidOperation(operator);
@@ -25,7 +26,7 @@ public class Node extends GenericNode {
 
 	public Node isValidOperation(String operator) {
 		Node node = null;
-		State currentState = this.getState();
+		State currentState = (State) this.getState();
 
 		switch (operator) {
 		case "BUILD1":
@@ -64,7 +65,7 @@ public class Node extends GenericNode {
 		if (node == null)
 			return null;
 
-		State nodeState = node.getState();
+		State nodeState = (State) node.getState();
 
 		if (nodeState.getFood() < 0 || nodeState.getMaterials() < 0 || nodeState.getEnergy() < 0
 				|| nodeState.getMoneySpent() > 100000 || nodeState.getFood() > 50 || nodeState.getMaterials() > 50
@@ -85,8 +86,8 @@ class UCSNodeComparator implements Comparator<Node> {
 
 	@Override
 	public int compare(Node n1, Node n2) {
-		State n1State = n1.getState();
-		State n2State = n2.getState();
+		State n1State = (State) n1.getState();
+		State n2State = (State) n2.getState();
 
 		return Integer.compare(n1State.getMoneySpent(), n2State.getMoneySpent());
 	}
@@ -96,8 +97,8 @@ class GRSOneNodeComparator implements Comparator<Node> {
 
 	@Override
 	public int compare(Node n1, Node n2) {
-		State n1State = n1.getState();
-		State n2State = n2.getState();
+		State n1State = (State) n1.getState();
+		State n2State = (State) n2.getState();
 
 		int n1RemainingProsperity = Math.max(100 - n1State.getProsperity(), 0);
 
@@ -117,8 +118,8 @@ class GRSTwoNodeComparator implements Comparator<Node> {
 
 	@Override
 	public int compare(Node n1, Node n2) {
-		State n1State = n1.getState();
-		State n2State = n2.getState();
+		State n1State = (State) n1.getState();
+		State n2State = (State) n2.getState();
 
 		int n1RemainingProsperity = Math.max(100 - n1State.getProsperity(), 0);
 		int n2RemainingProsperity = Math.max(100 - n2State.getProsperity(), 0);
@@ -166,8 +167,8 @@ class GRSTwoNodeComparator implements Comparator<Node> {
 class ASOneNodeComparator implements Comparator<Node> {
 	@Override
 	public int compare(Node n1, Node n2) {
-		State n1State = n1.getState();
-		State n2State = n2.getState();
+		State n1State = (State) n1.getState();
+		State n2State = (State) n2.getState();
 
 		int n1RemainingProsperity = Math.max(100 - n1State.getProsperity(), 0);
 
@@ -187,8 +188,8 @@ class ASTwoNodeComparator implements Comparator<Node> {
 
 	@Override
 	public int compare(Node n1, Node n2) {
-		State n1State = n1.getState();
-		State n2State = n2.getState();
+		State n1State = (State) n1.getState();
+		State n2State = (State) n2.getState();
 
 		int n1RemainingProsperity = Math.max(100 - n1State.getProsperity(), 0);
 		int n2RemainingProsperity = Math.max(100 - n2State.getProsperity(), 0);

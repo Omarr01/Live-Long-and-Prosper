@@ -92,7 +92,7 @@ public class Town {
 	}
 
 	public static Node build(Node node, int buildNumber) {
-		State nodeState = node.getState();
+		State nodeState = (State) node.getState();
 
 		int prosperity = nodeState.getProsperity() + (buildNumber == 1 ? Town.prosperityBUILD1 : Town.prosperityBUILD2);
 		int food = nodeState.getFood() - (buildNumber == 1 ? Town.foodUseBUILD1 : Town.foodUseBUILD2);
@@ -124,7 +124,7 @@ public class Town {
 	}
 
 	public static Node requestEnergy(Node node) {
-		State nodeState = node.getState();
+		State nodeState = (State) node.getState();
 
 		int prosperity = nodeState.getProsperity();
 		int food = nodeState.getFood() - 1;
@@ -146,7 +146,7 @@ public class Town {
 	}
 
 	public static Node requestFood(Node node) {
-		State nodeState = node.getState();
+		State nodeState = (State) node.getState();
 
 		int prosperity = nodeState.getProsperity();
 		int food = nodeState.getFood() - 1;
@@ -168,7 +168,7 @@ public class Town {
 	}
 
 	public static Node requestMaterials(Node node) {
-		State nodeState = node.getState();
+		State nodeState = (State) node.getState();
 
 		int prosperity = nodeState.getProsperity();
 		int food = nodeState.getFood() - 1;
@@ -190,7 +190,7 @@ public class Town {
 	}
 
 	public static Node wait(Node node) {
-		State nodeState = node.getState();
+		State nodeState = (State) node.getState();
 
 		int prosperity = nodeState.getProsperity();
 		int food = nodeState.getFood() - 1;

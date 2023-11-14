@@ -4,35 +4,35 @@ import java.util.ArrayList;
 import java.util.Objects;
 
 public abstract class GenericNode {
-	private State state;
-	private Node parent;
+	private GenericState state;
+	private GenericNode parent;
 	private String operator;
 	private int depth;
 	private int pathCost;
 
-	public GenericNode(State state, Node parent, String operator, int depth, int pathCost) {
+	public GenericNode(GenericState state, GenericNode parent, String operator, int depth, int pathCost) {
 		this.state = state;
 		this.parent = parent;
 		this.operator = operator;
 		this.depth = depth;
 		this.pathCost = pathCost;
 	}
-	
-	public abstract ArrayList<Node> expand();
-	
-	public State getState() {
+
+	public abstract ArrayList<GenericNode> expand();
+
+	public GenericState getState() {
 		return this.state;
 	}
 
-	public void setState(State state) {
+	public void setState(GenericState state) {
 		this.state = state;
 	}
 
-	public Node getParent() {
+	public GenericNode getParent() {
 		return this.parent;
 	}
 
-	public void setParent(Node parent) {
+	public void setParent(GenericNode parent) {
 		this.parent = parent;
 	}
 
@@ -73,7 +73,7 @@ public abstract class GenericNode {
 			return false;
 		if (this.getClass() != obj.getClass())
 			return false;
-		Node other = (Node) obj;
+		GenericNode other = (GenericNode) obj;
 		return Objects.equals(this.state, other.getState());
 	}
 }

@@ -24,6 +24,7 @@ public class State extends GenericState {
 		this.energyDelay = energyDelay;
 	}
 
+	@Override
 	public String toString() {
 		return "Prosperity: " + this.prosperity + "\n" + "Food: " + this.food + "\n" + "Materials: " + this.materials
 				+ "\n" + "Energy: " + this.energy + "\n" + "Money Spent: " + this.moneySpent + "\n" + "Food Delay: "

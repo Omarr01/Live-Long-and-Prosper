@@ -7,8 +7,8 @@ public class UCS extends SearchStrategy {
 	private UCSNodeComparator comparator = new UCSNodeComparator();
 
 	@Override
-	public SearchQueue queueingFunction(SearchQueue nodes, ArrayList<Node> expandedNodes, int depthLimit) {
-		for (Node node : expandedNodes) {
+	public SearchQueue queueingFunction(SearchQueue nodes, ArrayList<GenericNode> expandedNodes, int depthLimit) {
+		for (GenericNode node : expandedNodes) {
 			nodes.add(node);
 		}
 

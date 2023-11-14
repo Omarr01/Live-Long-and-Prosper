@@ -6,7 +6,7 @@ public class LLAPSearch extends GenericSearch {
 
 	public static String solve(String townParameters, String strategy, boolean visualize) {
 		String solution = "";
-		
+
 		ArrayList<String> operators = new ArrayList<>();
 		operators.add("WAIT");
 		operators.add("RequestMaterials");
@@ -14,7 +14,7 @@ public class LLAPSearch extends GenericSearch {
 		operators.add("RequestEnergy");
 		operators.add("BUILD2");
 		operators.add("BUILD1");
-		
+
 		LLAPProblem problem = new LLAPProblem(operators, townParameters, new ArrayList<String>());
 
 		switch (strategy) {

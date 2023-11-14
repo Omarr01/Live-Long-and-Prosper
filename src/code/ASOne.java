@@ -7,8 +7,8 @@ public class ASOne extends SearchStrategy {
 	private ASOneNodeComparator comparator = new ASOneNodeComparator();
 
 	@Override
-	public SearchQueue queueingFunction(SearchQueue nodes, ArrayList<Node> expandedNodes, int depthLimit) {
-		for (Node node : expandedNodes) {
+	public SearchQueue queueingFunction(SearchQueue nodes, ArrayList<GenericNode> expandedNodes, int depthLimit) {
+		for (GenericNode node : expandedNodes) {
 			nodes.add(node);
 		}
 
