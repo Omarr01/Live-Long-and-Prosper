@@ -160,7 +160,7 @@ class GRSTwoNodeComparator implements Comparator<Node> {
 
 	public static double calculateRequestCost(double remainingBuild, double resourceUse, double currentResource,
 			double amountRequest, double unitPrice) {
-		return Math.min(0, ((remainingBuild * resourceUse - currentResource) / amountRequest) * unitPrice);
+		return Math.max(0, ((remainingBuild * resourceUse - currentResource) / amountRequest) * unitPrice);
 	}
 }
 
